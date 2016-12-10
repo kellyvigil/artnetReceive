@@ -1,12 +1,3 @@
-#include <Dhcp.h>
-#include <Dns.h>
-#include <Ethernet2.h>
-#include <EthernetClient.h>
-#include <EthernetServer.h>
-#include <EthernetUdp2.h>
-#include <Twitter.h>
-#include <util.h>
-
 /*
 ARTNET RECEIVER v3.1
 
@@ -32,10 +23,16 @@ V3.1 by MSBERGER 130801
 
 */
 
-
+#include <Dhcp.h>
+#include <Dns.h>
+#include <Ethernet2.h>
+#include <EthernetClient.h>
+#include <EthernetServer.h>
+#include <EthernetUdp2.h>
+#include <Twitter.h>
+#include <util.h>
 #include <SPI.h>
-//#include <Ethernet.h>
-//#include <EthernetUdp.h>         // UDP library from: bjoern@cs.stanford.edu 12/30/2008
+
 #define short_get_high_byte(x) ((HIGH_BYTE & x) >> 8)
 #define short_get_low_byte(x)  (LOW_BYTE & x)
 #define bytes_to_short(h,l) ( ((h << 8) & 0xff00) | (l & 0x00FF) );
@@ -80,7 +77,7 @@ boolean match_artnet = 1;
 short Opcode = 0;
 EthernetUDP Udp;
 
-/*
+
 //////////NeoPixel Stuff
 #include <Adafruit_NeoPixel.h>
 #include <avr/power.h>
@@ -96,15 +93,15 @@ EthernetUDP Udp;
 //   NEO_KHZ400  400 KHz (classic 'v1' (not v2) FLORA pixels, WS2811 drivers)
 //   NEO_GRB     Pixels are wired for GRB bitstream (most NeoPixel products)
 //   NEO_RGB     Pixels are wired for RGB bitstream (v1 FLORA pixels, not v2)
-Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel strip = Adafruit_NeoPixel(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
 
 // IMPORTANT: To reduce NeoPixel burnout risk, add 1000 uF capacitor across
 // pixel power leads, add 300 - 500 Ohm resistor on first pixel's data input
 // and minimize distance between Arduino and first pixel.  Avoid connecting
 // on a live circuit...if you must, connect GND first.
-*/
 
 
+/*
 ///////DotStar Shit
 #include <Adafruit_DotStar.h>
 
@@ -124,7 +121,7 @@ Adafruit_DotStar pixel = Adafruit_DotStar(
 // (Arduino Uno = pin 11 for data, 13 for clock, other boards are different).
 //Adafruit_DotStar strip = Adafruit_DotStar(NUMPIXELS, DOTSTAR_BRG);
 
-
+*/
 int delayval = 20; // delay for half a second
 
 
@@ -143,8 +140,8 @@ void setup() {
   clock_prescale_set(clock_div_1); // Enable 16 MHz on Trinket
 #endif
 
-  pixel.begin(); // Initialize pins for output
-  pixel.show();  // Turn all LEDs off ASAP
+  strip.begin(); // Initialize pins for output
+  strip.show();  // Turn all LEDs off ASAP
 }
 
 void loop() {
@@ -228,7 +225,7 @@ void loop() {
     
     int ledNum;
     for(ledNum = 0; ledNum < NUMPIXELS; ledNum++){
-      pixel.setPixelColor(ledNum, buffer_channel_arduino[ledNum*3], buffer_channel_arduino[ledNum*3+1], buffer_channel_arduino[ledNum*3+2]);
+      strip.setPixelColor(ledNum, buffer_channel_arduino[ledNum*3], buffer_channel_arduino[ledNum*3+1], buffer_channel_arduino[ledNum*3+2]);
    
     }
 
@@ -237,7 +234,7 @@ void loop() {
 
   }
 
-  pixel.show(); // This sends the updated pixel color to the hardware.
+  strip.show(); // This sends the updated pixel color to the hardware.
   delay(delayval); // Delay for a period of time (in milliseconds)
 
 
